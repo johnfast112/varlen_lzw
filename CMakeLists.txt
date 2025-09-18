@@ -10,4 +10,6 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIGURATION>")
 add_executable(varlen_lzw)
 
 target_sources(varlen_lzw
+PUBLIC varlen_lzw.cpp
+PUBLIC options.cpp
 PUBLIC main.cpp)

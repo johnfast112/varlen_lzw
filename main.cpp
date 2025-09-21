@@ -31,7 +31,7 @@ int main(int argc, char** argv){
 
   //Verify options
   if(args.lzw_minimum_code_size<1){
-    std::cerr << "varlen_lzw: minimum code size must be at least 1\n";
+    std::cerr << "varlen_lzw: requres a minimum code size of at least 1\n";
     return 2; //Bad argument
   }
   if(args.filename.empty()){
@@ -49,14 +49,18 @@ int main(int argc, char** argv){
   file.seekg(0, std::ios::end);
   std::size_t size = file.tellg();
   char data[size];
-  file.read(data, size);
   file.seekg(0, std::ios::beg);
+  file.read(data, size);
 
   file.close();
 
   //TODO: Return indicies
   LZW::IndexStr indicies{};
   LZW::toindicies(args.lzw_minimum_code_size, data, size, &indicies);
+
+  for(LZW::IndexStr* p{&indicies}; p != nullptr; p = p->next){
+    std::cout << "Index: " << p->index << '\n';
+  }
 
   return 0;
 }

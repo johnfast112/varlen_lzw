@@ -2,16 +2,19 @@
 #define VARLEN_LZW_H
 
 #include <cstddef>
+#include <cstdint>
 
 namespace LZW{
 
 //TODO: This can probably be improved but it's fine for now
 struct IndexStr{
-  int index;
-  LZW::IndexStr* m_next{nullptr};
+  uint16_t index;
+  LZW::IndexStr* next{nullptr};
 };
 
-int toindicies(int lzw_minimum_code_size, const char* data, std::size_t size, LZW::IndexStr* out);
+void freeIndexStr(LZW::IndexStr* is);
+
+uint16_t toindicies(uint16_t lzw_minimum_code_size, const char* data, std::size_t size, LZW::IndexStr* out);
 
 }
 

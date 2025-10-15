@@ -118,31 +118,24 @@ int LZW::toindicies(uint16_t lzw_minimum_code_size, const char* data_stream, std
   uint8_t bits_read{0};
   uint16_t lzw_code{};
   std::size_t data_stream_index{0};
-  //while(data_stream_index<data_stream_size){
-  //while(data_stream_index<5408){ //TODO: Replace me with above comment
-  while(data_stream_index<5697){ //TODO: Replace me with above comment
+  while(data_stream_index<data_stream_size){
+  //while(data_stream_index<5697){ //TODO: Replace me with above comment
+  //while(data_stream_index<287){ //TODO: Replace me with above comment
     //TODO:Remove the following debug
-      //std::cout << "Full string: ";
-      //pstr(out_str);
-      //std::cout << '\n';
-      std::cout << "Held string: ";
-      pstr(&held_code);
-      std::cout << '\n';
+    //std::cout << "Full string: ";
+    //pstr(out_str);
+    //std::cout << '\n';
+    std::cout << "Held string: ";
+    pstr(&held_code);
+    std::cout << '\n';
 
     //If the size of the dictionary does not fit within the number of bits for lzw
     //codes, increase the size of the codes by 1 bit
+    //TODO: Does this need cleaning up?
     if(dictionary.size() > ((uint32_t)1 << compression_code_bit_size) - 1){
-      //TODO: This is bogus?
-      if(dictionary.size() > 0xFFF){
-        while(dictionary.size() > 0xFFF){
-          freeIndexStr(&dictionary.back());
-          dictionary.pop_back();
-        }
-      } else {
+      if(compression_code_bit_size < 12){
         compression_code_bit_size++;
       }
-      //TODO: Uncomment this:
-      //compression_code_bit_size++;
     }
 
     //Read 8 bits at a time until bits_read >= <compression code bit size>
@@ -228,6 +221,10 @@ int LZW::toindicies(uint16_t lzw_minimum_code_size, const char* data_stream, std
     //TODO: Special case code
     if(lzw_code == clear_code){
       compression_code_bit_size = compression_code_starting_bit_size;
+      cur_held_code = nullptr;
+      std::cout << "HERE\n";
+      freeIndexStr(&held_code);
+      std::cout << "HERE\n";
       while(dictionary.size()>first_available_compression_code){
         freeIndexStr(&dictionary.back());
         dictionary.pop_back();
@@ -238,6 +235,7 @@ int LZW::toindicies(uint16_t lzw_minimum_code_size, const char* data_stream, std
     if(lzw_code == end_of_information_code){
       //TODO: This
       std::cout << "END OF INFORMATION CODE\n";
+      return 0;
       continue;
     }
 
@@ -318,7 +316,7 @@ int LZW::toindicies(uint16_t lzw_minimum_code_size, const char* data_stream, std
       pstr(&dictionary.back());
       std::cout << '\n';
     }
-    
+
     //Hold on to the code for the next iteration
     freeIndexStr(&held_code);
     cur_held_code = &held_code;

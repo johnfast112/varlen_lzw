@@ -119,20 +119,30 @@ int LZW::toindicies(uint16_t lzw_minimum_code_size, const char* data_stream, std
   uint16_t lzw_code{};
   std::size_t data_stream_index{0};
   //while(data_stream_index<data_stream_size){
-  while(data_stream_index<5406){ //TODO: Replace me with above comment
+  //while(data_stream_index<5408){ //TODO: Replace me with above comment
+  while(data_stream_index<5697){ //TODO: Replace me with above comment
     //TODO:Remove the following debug
-      std::cout << "Full string: ";
-      pstr(out_str);
-      std::cout << '\n';
+      //std::cout << "Full string: ";
+      //pstr(out_str);
+      //std::cout << '\n';
       std::cout << "Held string: ";
       pstr(&held_code);
       std::cout << '\n';
 
     //If the size of the dictionary does not fit within the number of bits for lzw
     //codes, increase the size of the codes by 1 bit
-    //TODO: Maybe off by one
     if(dictionary.size() > ((uint32_t)1 << compression_code_bit_size) - 1){
-      compression_code_bit_size++;
+      //TODO: This is bogus?
+      if(dictionary.size() > 0xFFF){
+        while(dictionary.size() > 0xFFF){
+          freeIndexStr(&dictionary.back());
+          dictionary.pop_back();
+        }
+      } else {
+        compression_code_bit_size++;
+      }
+      //TODO: Uncomment this:
+      //compression_code_bit_size++;
     }
 
     //Read 8 bits at a time until bits_read >= <compression code bit size>
@@ -217,11 +227,11 @@ int LZW::toindicies(uint16_t lzw_minimum_code_size, const char* data_stream, std
     //Special case code
     //TODO: Special case code
     if(lzw_code == clear_code){
-      //compression_code_bit_size = compression_code_starting_bit_size;
-      //while(dictionary.size()>first_available_compression_code){
-      //  freeIndexStr(&dictionary.back());
-      //  dictionary.pop_back();
-      //}
+      compression_code_bit_size = compression_code_starting_bit_size;
+      while(dictionary.size()>first_available_compression_code){
+        freeIndexStr(&dictionary.back());
+        dictionary.pop_back();
+      }
       std::cout << "CLEAR CODE\n";
       continue;
     }
@@ -231,6 +241,7 @@ int LZW::toindicies(uint16_t lzw_minimum_code_size, const char* data_stream, std
       continue;
     }
 
+    //TODO: Remove
     //Index into dictionary using the extracted code
     if(lzw_code<dictionary.size()){
       std::cout << "String " << static_cast<uint16_t>(lzw_code) << ": ";

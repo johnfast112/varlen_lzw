@@ -14,7 +14,7 @@ struct IndexStr{
 
 void freeIndexStr(LZW::IndexStr* is);
 
-uint16_t toindicies(uint16_t lzw_minimum_code_size, const char* data, std::size_t size, LZW::IndexStr* out);
+int toindicies(uint16_t lzw_minimum_code_size, const char* data, std::size_t size, LZW::IndexStr* out);
 
 }
 

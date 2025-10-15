@@ -59,9 +59,12 @@ int main(int argc, char** argv){
   LZW::toindicies(args.lzw_minimum_code_size, data, size, &indicies);
 
   //This is output. TODO: Remove me maybe?
+  int count{0};
   for(LZW::IndexStr* p{&indicies}; p != nullptr; p = p->next){
     std::cout << "Index: " << p->index << '\n';
+    ++count;
   }
+  std::cout << "count: " << count << '\n';
 
   return 0;
 }

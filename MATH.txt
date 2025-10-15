@@ -1,805 +1,47 @@
 //TODO: The rest of the LSBs
+//TODO: MSBs
 //let cs = lzw code bit size
 //let br = bits read
 //let sl = bits to shift left
 //let sr = bits to shift right
-
-//Math for bit shifting the MOST significant bits of variable length lzw code
-//3 bit codes
-//Parity 1
-ccbbbaaa
-cs = 3
-br = 8
-sl = br - cs = 5
-if(br>8) {
-  sr = br - cs = 5
-} else {
-  sr = 8 - cs = 5
-}
-br = br - cs = 5
-
-ccbbbaaa
-cs = 3
-br = 5
-sl = br - cs = 2
-if(br>8) {
-  sr = br - cs = 2
-} else {
-  sr = 8 - cs = 5
-}
-br = br - cs = 2
-
-ccbbbaaa feeedddc
-cs = 3
-br = 10
-sl = br - cs = 7
-if(br>8) {
-  sr = br - cs = 7
-} else {
-  sr = 8 - cs = 5
-}
-br = br - cs = 7
-
-feeedddc
-cs = 3
-br = 7
-sl = br - cs = 4
-if(br>8) {
-  sr = br - cs = 4
-} else {
-  sr = 8 - cs = 5
-}
-br = br - cs = 4
-
-feeedddc
-cs = 3
-br = 4
-sl = br - cs = 1
-if(br>8) {
-  sr = br - cs = 1
-} else 1
-  sr = 8 - cs = 5
-}
-br = br - cs = 1
-
-feeedddc hhhgggff
-cs = 3
-br = 9
-sl = br - cs = 6
-if(br>8) {
-  sr = br - cs = 6
-} else 1
-  sr = 8 - cs = 5
-}
-br = br - cs = 6
-
-hhhgggff
-cs = 3
-br = 6
-sl = br - cs = 3
-if(br>8) {
-  sr = br - cs = 3
-} else 1
-  sr = 8 - cs = 5
-}
-br = br - cs = 3
-
-hhhgggff
-cs = 3
-br = 3
-sl = br - cs = 0
-if(br>8) {
-  sr = br - cs = 0
-} else 1
-  sr = 8 - cs = 5
-}
-br = br - cs = 0
-
-
-
-
-
-//4 bit codes
-//Parity 1
-bbbbaaaa
-cs = 4
-br = 8
-sl = br - cs = 4
-if(br>8) {
-  sr = br - cs = 4
-} else {
-  sr = 8 - cs = 4
-}
-br = br - cs = 4
-
-bbbbaaaa
-cs = 4
-br = 4
-sl = br - cs = 0
-if(br>8) {
-  sr = br - cs = 0
-} else {
-  sr = 8 - cs = 4
-}
-br = br - cs = 0
-
-//Parity 2
-cccbbbba
-cs = 4
-br = 7
-sl = br - cs = 3
-if(br>8) {
-  sr = br - cs = 3
-} else {
-  sr = 8 - cs = 4
-}
-br = br - cs = 3
-
-cccbbbba eeeddddc
-cs = 4
-br = 11
-sl = br - cs = 7
-if(br>8) {
-  sr = br - cs = 7
-} else {
-  sr = 8 - cs = 4
-}
-br = br - cs = 7
-
-//Parity 3
-ccbbbbaa
-cs = 4
-br = 6
-sl = br - cs = 2
-if(br>8) {
-  sr = br - cs = 2
-} else {
-  sr = 8 - cs = 4
-}
-br = br - cs = 2
-
-ccbbbbaa eeddddcc
-cs = 4
-br = 10
-sl = br - cs = 6
-if(br>8) {
-  sr = br - cs = 6
-} else {
-  sr = 8 - cs = 4
-}
-br = br - cs = 6
-
-//Parity 4
-cbbbbaaa
-cs = 4
-br = 5
-sl = br - cs = 1
-if(br>8) {
-  sr = br - cs = 1
-} else {
-  sr = 8 - cs = 4
-}
-br = br - cs = 1
-
-cbbbbaaa eddddccc
-cs = 4
-br = 9
-sl = br - cs = 5
-if(br>8) {
-  sr = br - cs = 5
-} else {
-  sr = 8 - cs = 4
-}
-br = br - cs = 5
-
-
-
-
-
-//5 bit codes
-//Parity 1
-bbbaaaaa
-cs = 5
-br = 8
-sl = br - cs = 3
-if(br>8) {
-  sr = br - cs = 3
-} else {
-  sr = 8 - cs = 3
-}
-br = br - cs = 3
-
-bbbaaaaa ecccccdd
-cs = 5
-br = 11
-sl = br - cs = 6
-if(br>8) {
-  sr = br - cs = 6
-} else {
-  sr = 8 - cs = 3
-}
-br = br - cs = 6
-
-ecccccdd
-cs = 5
-br = 6
-sl = br - cs = 1
-if(br>8) {
-  sr = br - cs = 1
-} else {
-  sr = 8 - cs = 3
-}
-br = br - cs = 1
-
-ecccccdd ffffeeee
-cs = 5
-br = 9
-sl = br - cs = 4
-if(br>8) {
-  sr = br - cs = 4
-} else {
-  sr = 8 - cs = 3
-}
-br = br - cs = 4
-
-ffffeeee hhgggggf
-cs = 5
-br = 12
-sl = br - cs = 7
-if(br>8) {
-  sr = br - cs = 7
-} else {
-  sr = 8 - cs = 3
-}
-br = br - cs = 7
-
-hhgggggf
-cs = 5
-br = 7
-sl = br - cs = 2
-if(br>8) {
-  sr = br - cs = 2
-} else {
-  sr = 8 - cs = 3
-}
-br = br - cs = 2
-
-hhgggggf iiiiihhh
-cs = 5
-br = 10
-sl = br - cs = 5
-if(br>8) {
-  sr = br - cs = 5
-} else {
-  sr = 8 - cs = 3
-}
-br = br - cs = 5
-
-iiiiihhh
-cs = 5
-br = 5
-sl = br - cs = 0
-if(br>8) {
-  sr = br - cs = 0
-} else {
-  sr = 8 - cs = 3
-}
-br = br - cs = 0
-
-
-
-
-
-//6 bit codes
-//Parity 1
-bbaaaaaa
-cs = 6
-br = 8
-sl = br - cs = 2
-if(br>8) {
-  sr = br - cs = 2
-} else {
-  sr = 8 - cs = 2
-}
-br = br - cs = 2
-
-bbaaaaaa ccccbbbb
-cs = 6
-br = 10
-sl = br - cs = 4
-if(br>8) {
-  sr = br - cs = 4
-} else {
-  sr = 8 - cs = 2
-}
-br = br - cs = 4
-
-ccccbbbb ddddddcc
-cs = 6
-br = 12
-sl = br - cs = 6
-if(br>8) {
-  sr = br - cs = 6
-} else {
-  sr = 8 - cs = 2
-}
-br = br - cs = 6
-
-ddddddcc
-cs = 6
-br = 6
-sl = br - cs = 0
-if(br>8) {
-  sr = br - cs = 0
-} else {
-  sr = 8 - cs = 2
-}
-br = br - cs = 0
-
-//Parity 2
-cbbbbbba
-cs = 6
-br = 7
-sl = br - cs = 1
-if(br>8) {
-  sr = br - cs = 1
-} else {
-  sr = 8 - cs = 2
-}
-br = br - cs = 1
-
-cbbbbbba dddccccc
-cs = 6
-br = 9
-sl = br - cs = 3
-if(br>8) {
-  sr = br - cs = 3
-} else {
-  sr = 8 - cs = 2
-}
-br = br - cs = 3
-
-dddccccc eeeeeddd
-cs = 6
-br = 11
-sl = br - cs = 5
-if(br>8) {
-  sr = br - cs = 5
-} else {
-  sr = 8 - cs = 2
-}
-br = br - cs = 5
-
-eeeeeddd gffffffe
-cs = 6
-br = 13
-sl = br - cs = 7
-if(br>8) {
-  sr = br - cs = 7
-} else {
-  sr = 8 - cs = 2
-}
-br = br - cs = 7
-
-
-
-
-
-//7 bit codes
-//Parity 1
-baaaaaaa
-cs = 7
-br = 8
-sl = br - cs = 1
-if(br>8) {
-  sr = br - cs = 1
-} else {
-  sr = 8 - cs = 1
-}
-br = br - cs = 1
-
-baaaaaaa ccbbbbbb
-cs = 7
-br = 9
-sl = br - cs = 2
-if(br>8) {
-  sr = br - cs = 2
-} else {
-  sr = 8 - cs = 1
-}
-br = br - cs = 2
-
-ccbbbbbb dddccccc
-cs = 7
-br = 10
-sl = br - cs = 3
-if(br>8) {
-  sr = br - cs = 3
-} else {
-  sr = 8 - cs = 1
-}
-br = br - cs = 3
-
-dddccccc eeeedddd
-cs = 7
-br = 11
-sl = br - cs = 4
-if(br>8) {
-  sr = br - cs = 4
-} else {
-  sr = 8 - cs = 1
-}
-br = br - cs = 4
-
-eeeedddd fffffeee
-cs = 7
-br = 12
-sl = br - cs = 5
-if(br>8) {
-  sr = br - cs = 5
-} else {
-  sr = 8 - cs = 1
-}
-br = br - cs = 5
-
-fffffeee ggggggff
-cs = 7
-br = 13
-sl = br - cs = 6
-if(br>8) {
-  sr = br - cs = 6
-} else {
-  sr = 8 - cs = 1
-}
-br = br - cs = 6
-
-ggggggff eeeeeeeg
-cs = 7
-br = 14
-sl = br - cs = 7
-if(br>8) {
-  sr = br - cs = 7
-} else {
-  sr = 8 - cs = 1
-}
-br = br - cs = 7
-
-eeeeeeeg
-cs = 7
-br = 7
-sl = br - cs = 0
-if(br>8) {
-  sr = br - cs = 0
-} else {
-  sr = 8 - cs = 1
-}
-br = br - cs = 0
-
-
-
-
-
-//8 bit codes
-//Parity 1
-aaaaaaaa
-cs = 8
-br = 8
-sl = br - cs = 0
-if(br>8) {
-  sr = br - cs = 0
-} else {
-  sr = 8 - cs = 0
-}
-br = br - cs = 0
-
-
-
-
-
-//9 bit codes
-//Parity 1
-aaaaaaaa bbbbbbba
-cs = 9
-br = 16
-sl = br - cs = 7
-if(br>8) {
-  sr = br - cs = 7
-} else {
-  sr = 8 - cs = -1
-}
-br = br - cs = 7
-
-bbbbbbba ccccccbb
-cs = 9
-br = 15
-sl = br - cs = 6
-if(br>8) {
-  sr = br - cs = 6
-} else {
-  sr = 8 - cs = -1
-}
-br = br - cs = 6
-
-ccccccbb dddddccc
-cs = 9
-br = 14
-sl = br - cs = 5
-if(br>8) {
-  sr = br - cs = 5
-} else {
-  sr = 8 - cs = -1
-}
-br = br - cs = 5
-
-dddddccc eeeedddd
-cs = 9
-br = 13
-sl = br - cs = 4
-if(br>8) {
-  sr = br - cs = 4
-} else {
-  sr = 8 - cs = -1
-}
-br = br - cs = 4
-
-eeeedddd fffeeeee
-cs = 9
-br = 12
-sl = br - cs = 3
-if(br>8) {
-  sr = br - cs = 3
-} else {
-  sr = 8 - cs = -1
-}
-br = br - cs = 3
-
-fffeeeee ggffffff
-cs = 9
-br = 11
-sl = br - cs = 2
-if(br>8) {
-  sr = br - cs = 2
-} else {
-  sr = 8 - cs = -1
-}
-br = br - cs = 2
-
-ggffffff hggggggg
-cs = 9
-br = 10
-sl = br - cs = 1
-if(br>8) {
-  sr = br - cs = 1
-} else {
-  sr = 8 - cs = -1
-}
-br = br - cs = 1
-
-hggggggg hhhhhhhh
-cs = 9
-br = 9
-sl = br - cs = 0
-if(br>8) {
-  sr = br - cs = 0
-} else {
-  sr = 8 - cs = -1
-}
-br = br - cs = 0
-
-
-
-
-
-//10 bit codes
-//Parity 1
-aaaaaaaa bbbbbbaa
-cs = 10
-br = 16
-sl = br - cs = 6
-if(br>8) {
-  sr = br - cs = 6
-} else {
-  sr = 8 - cs = -2
-}
-br = br - cs = 6
-
-bbbbbbaa ccccbbbb
-cs = 10
-br = 14
-sl = br - cs = 4
-if(br>8) {
-  sr = br - cs = 4
-} else {
-  sr = 8 - cs = -2
-}
-br = br - cs = 4
-
-ccccbbbb ddcccccc
-cs = 10
-br = 12
-sl = br - cs = 2
-if(br>8) {
-  sr = br - cs = 2
-} else {
-  sr = 8 - cs = -2
-}
-br = br - cs = 2
-
-ddcccccc dddddddd
-cs = 10
-br = 10
-sl = br - cs = 0
-if(br>8) {
-  sr = br - cs = 0
-} else {
-  sr = 8 - cs = -2
-}
-br = br - cs = 0
-
-//Parity 2
-bbbbbbba cccccbbb
-cs = 10
-br = 15
-sl = br - cs = 5
-if(br>8) {
-  sr = br - cs = 5
-} else {
-  sr = 8 - cs = -2
-}
-br = br - cs = 5
-
-cccccbbb dddccccc
-cs = 10
-br = 13
-sl = br - cs = 3
-if(br>8) {
-  sr = br - cs = 3
-} else {
-  sr = 8 - cs = -2
-}
-br = br - cs = 3
-
-dddccccc eddddddd
-cs = 10
-br = 11
-sl = br - cs = 1
-if(br>8) {
-  sr = br - cs = 1
-} else {
-  sr = 8 - cs = -2
-}
-br = br - cs = 1
-
-eddddddd eeeeeeee fffffffe
-cs = 10
-br = 17
-sl = br - cs = 7
-if(br>8) {
-  sr = br - cs = 7
-} else {
-  sr = 8 - cs = -2
-}
-br = br - cs = 7
-
-
-
-
-
-//11 bit codes
-//Parity 1
-aaaaaaaa bbbbbaaa
-cs = 11
-br = 16
-sl = br - cs = 5
-if(br>8) {
-  sr = br - cs = 5
-} else {
-  sr = 8 - cs = -3
-}
-br = br - cs = 5
-
-bbbbbaaa ccbbbbbb
-cs = 11
-br = 13
-sl = br - cs = 2
-if(br>8) {
-  sr = br - cs = 2
-} else {
-  sr = 8 - cs = -3
-}
-br = br - cs = 2
-
-ccbbbbbb cccccccc dddddddc
-cs = 11
-br = 18
-sl = br - cs = 7
-if(br>8) {
-  sr = br - cs = 7
-} else {
-  sr = 8 - cs = -3
-}
-br = br - cs = 7
-
-dddddddc eeeedddd
-cs = 11
-br = 15
-sl = br - cs = 4
-if(br>8) {
-  sr = br - cs = 4
-} else {
-  sr = 8 - cs = -3
-}
-br = br - cs = 4
-
-eeeedddd feeeeeee
-cs = 11
-br = 12
-sl = br - cs = 1
-if(br>8) {
-  sr = br - cs = 1
-} else {
-  sr = 8 - cs = -3
-}
-br = br - cs = 1
-
-feeeeeee ffffffff ggggggff
-cs = 11
-br = 17
-sl = br - cs = 6
-if(br>8) {
-  sr = br - cs = 6
-} else {
-  sr = 8 - cs = -3
-}
-br = br - cs = 6
-
-ggggggff hhhggggg
-cs = 11
-br = 14
-sl = br - cs = 3
-if(br>8) {
-  sr = br - cs = 3
-} else {
-  sr = 8 - cs = -3
-}
-br = br - cs = 3
-
-hhhggggg hhhhhhhh
-cs = 11
-br = 11
-sl = br - cs = 0
-if(br>8) {
-  sr = br - cs = 0
-} else {
-  sr = 8 - cs = -3
-}
-br = br - cs = 0
-
-
-
-
-
-//12 bit codes
-//Parity 1
-aaaaaaaa bbbbaaaa
-cs = 12
-br = 16
-sl = br - cs = 4
-if(br>8) {
-  sr = br - cs = 4
-} else {
-  sr = 8 - cs = -4
-}
-br = br - cs = 4
-
-//ETC ETC I WILL GO CRAZY IF 12 BIT CODES ARE DIFFERENT FROM 10 BIT
-//TODO: The rest of the MSBs I guess
-
-
-
-
-
-//Math for bit shifting the LEAST significant bits of lzw codes LESS than 9 bits in size
+//let bl = buffer holding lower bits
+//let bh = buffer holding higher bits
+//let bf = buffer holding a full 8 bits that aren't part of bl or bh
+
+//The working algorithm for grabbing the LEAST significant bits (rightmost) is as follows:
+//cs = ?
+//br = ?
+//if(br>16){
+//  sl = 0
+//  sr = 24 - br = ?
+//  MARK FULL BYTE FOR USE
+//} else if(br>8) {
+//  sl = 0
+//  sr = 16 - br = ?
+//} else {
+//  sl = br - cs = ?
+//  sr = 8 - cs = ?
+//}
+//br = br - cs = ?
+
+//TODO: The working algorithm for grabbing the MOST significant bits (leftmost) is as follows:
+
+//The working algorithm for combining the lower and higher bits of the code is as follows:
+//if(br>16){
+//  code = 
+//  (bl << (0)      ) |
+//  (bf << (br - 16)) |
+//  (bh << (br - 8) )
+//} else if(br>8)) {
+//  code = 
+//  (bl << (0)      ) |
+//  (bh << (br - 8) )
+//} else {
+//  code = 
+//  (bh << (0) )
+//}
+
+//Math for bit shifting the LEAST significant bits of variable length lzw code (Rightmost)
 //3 bit codes
 //Parity 1
 ccbbbaaa
@@ -831,9 +73,6 @@ cs = 3
 br = 10
 if(br>8) {
   sl = 0
-  sr = 8 - (br - 8) = 6
-  sr = 8 + -br +8) = 6
-  sr = 16 + -br = 6
   sr = 16 - br = 6
 } else {
   sl = br - cs = 7
@@ -910,6 +149,545 @@ br = br - cs = 0
 bbbbaaaa
 cs = 4
 br = 8
+if(br>8) {
+  sl = 0
+  sr = 16 - br = 8
+} else {
+  sl = br - cs = 4
+  sr = 8 - cs = 4
+}
+br = br - cs = 4
+
+bbbbaaaa
+cs = 4
+br = 4
+if(br>8) {
+  sl = 0
+  sr = 16 - br = 12
+} else {
+  sl = br - cs = 0
+  sr = 8 - cs = 4
+}
+br = br - cs = 0
+
+//Parity 2
+cccbbbba
+cs = 4
+br = 7
+if(br>8) {
+  sl = 0
+  sr = 16 - br = 9
+} else {
+  sl = br - cs = 3
+  sr = 8 - cs = 4
+}
+br = br - cs = 3
+
+cccbbbba eeeddddc
+cs = 4
+br = 11
+if(br>8) {
+  sl = 0
+  sr = 16 - br = 5
+} else {
+  sl = br - cs = 7
+  sr = 8 - cs = 4
+}
+br = br - cs = 7
+
+//Parity 3
+ccbbbbaa
+cs = 4
+br = 6
+if(br>8) {
+  sl = 0
+  sr = 16 - br = 10
+} else {
+  sl = br - cs = 2
+  sr = 8 - cs = 4
+}
+br = br - cs = 2
+
+ccbbbbaa eeddddcc
+cs = 4
+br = 10
+if(br>8) {
+  sl = 0
+  sr = 16 - br = 6
+} else {
+  sl = br - cs = 6
+  sr = 8 - cs = 4
+}
+br = br - cs = 6
+
+//Parity 4
+cbbbbaaa
+cs = 4
+br = 5
+if(br>8) {
+  sl = 0
+  sr = 16 - br = 11
+} else {
+  sl = br - cs = 1
+  sr = 8 - cs = 4
+}
+br = br - cs = 1
+
+cbbbbaaa eddddccc
+cs = 4
+br = 9
+if(br>8) {
+  sl = 0
+  sr = 16 - br = 7
+} else {
+  sl = br - cs = 5
+  sr = 8 - cs = 4
+}
+br = br - cs = 5
+
+
+
+
+
+//5 bit codes
+//Parity 1
+bbbaaaaa
+cs = 5
+br = 8
+if(br>8) {
+  sl = 0
+  sr = 16 - br = 8
+} else {
+  sl = br - cs = 3
+  sr = 8 - cs = 3
+}
+br = br - cs = 3
+
+bbbaaaaa dcccccbb
+cs = 5
+br = 11
+if(br>8) {
+  sl = 0
+  sr = 16 - br = 5
+} else {
+  sl = br - cs = 6
+  sr = 8 - cs = 3
+}
+br = br - cs = 6
+
+dcccccbb
+cs = 5
+br = 6
+if(br>8) {
+  sl = 0
+  sr = 16 - br = 10
+} else {
+  sl = br - cs = 1
+  sr = 8 - cs = 3
+}
+br = br - cs = 1
+
+dcccccbb eeeedddd
+cs = 5
+br = 9
+if(br>8) {
+  sl = 0
+  sr = 16 - br = 7
+} else {
+  sl = br - cs = 4
+  sr = 8 - cs = 3
+}
+br = br - cs = 4
+//TODO Rest of 5 bits codes
+
+
+
+
+
+//6 bit codes
+//Parity 1
+bbaaaaaa
+cs = 6
+br = 8
+if(br>8) {
+  sl = 0
+  sr = 16 - br = 8
+} else {
+  sl = br - cs = 2
+  sr = 8 - cs = 2
+}
+br = br - cs = 2
+
+bbaaaaaa ccccbbbb
+cs = 6
+br = 10
+if(br>8) {
+  sl = 0
+  sr = 16 - br = 6
+} else {
+  sl = br - cs = 4
+  sr = 8 - cs = 2
+}
+br = br - cs = 4
+
+ccccbbbb eeeeeecc
+cs = 6
+br = 12
+if(br>8) {
+  sl = 0
+  sr = 16 - br = 4
+} else {
+  sl = br - cs = 6
+  sr = 8 - cs = 2
+}
+br = br - cs = 6
+
+eeeeeecc
+cs = 6
+br = 6
+if(br>8) {
+  sl = 0
+  sr = 16 - br = 10
+} else {
+  sl = br - cs = 0
+  sr = 8 - cs = 2
+}
+br = br - cs = 0
+
+//Parity 2
+cbbbbbba
+cs = 6
+br = 7
+if(br>8) {
+  sl = 0
+  sr = 16 - br = 9
+} else {
+  sl = br - cs = 1
+  sr = 8 - cs = 1
+}
+br = br - cs = 1
+
+cbbbbbba dddccccc
+cs = 6
+br = 9
+if(br>8) {
+  sl = 0
+  sr = 16 - br = 7
+} else {
+  sl = br - cs = 3
+  sr = 8 - cs = 2
+}
+br = br - cs = 3
+
+dddccccc eeeeeddd
+cs = 6
+br = 11
+if(br>8) {
+  sl = 0
+  sr = 16 - br = 5
+} else {
+  sl = br - cs = 5
+  sr = 8 - cs = 2
+}
+br = br - cs = 5
+
+eeeeeddd gffffffe
+cs = 6
+br = 13
+if(br>8) {
+  sl = 0
+  sr = 16 - br = 3
+} else {
+  sl = br - cs = 7
+  sr = 8 - cs = 2
+}
+br = br - cs = 7
+
+
+
+
+
+//7 bit codes
+//TODO 7 bits codes
+//TODO 8 bits codes
+
+
+
+
+
+//9 bit codes
+//Parity 1
+aaaaaaaa bbbbbbba
+cs = 9
+br = 16
+if(br>8) {
+  sl = 0
+  sr = 16 - br = 0
+} else {
+  sl = br - cs = 7
+  sr = 8 - cs = -1
+}
+br = br - cs = 7
+
+bbbbbbba ccccccbb
+cs = 9
+br = 15
+if(br>8) {
+  sl = 0
+  sr = 16 - br = 1
+} else {
+  sl = br - cs = 6
+  sr = 8 - cs = -1
+}
+br = br - cs = 6
+
+ccccccbb dddddccc
+cs = 9
+br = 14
+if(br>8) {
+  sl = 0
+  sr = 16 - br = 2
+} else {
+  sl = br - cs = 5
+  sr = 8 - cs = -1
+}
+br = br - cs = 5
+
+dddddccc eeeedddd
+cs = 9
+br = 13
+if(br>8) {
+  sl = 0
+  sr = 16 - br = 3
+} else {
+  sl = br - cs = 4
+  sr = 8 - cs = -1
+}
+br = br - cs = 4
+
+eeeedddd fffeeeee
+cs = 9
+br = 12
+if(br>8) {
+  sl = 0
+  sr = 16 - br = 4
+} else {
+  sl = br - cs = 3
+  sr = 8 - cs = -1
+}
+br = br - cs = 3
+
+fffeeeee ggffffff
+cs = 9
+br = 11
+if(br>8) {
+  sl = 0
+  sr = 16 - br = 5
+} else {
+  sl = br - cs = 2
+  sr = 8 - cs = -1
+}
+br = br - cs = 2
+
+ggffffff hggggggg
+cs = 9
+br = 10
+if(br>8) {
+  sl = 0
+  sr = 16 - br = 6
+} else {
+  sl = br - cs = 1
+  sr = 8 - cs = -1
+}
+br = br - cs = 1
+
+hggggggg hhhhhhhh
+cs = 9
+br = 9
+if(br>8) {
+  sl = 0
+  sr = 16 - br = 7
+} else {
+  sl = br - cs = 0
+  sr = 8 - cs = -1
+}
+br = br - cs = 0
+
+
+
+
+
+//10 bit codes
+//Parity 1
+aaaaaaaa bbbbbbaa
+cs = 10
+br = 16
+if(br>8) {
+  sl = 0
+  sr = 16 - br = 0
+} else {
+  sl = br - cs = 6
+  sr = 8 - cs = -2
+}
+br = br - cs = 6
+
+bbbbbbaa ccccbbbb
+cs = 10
+br = 14
+if(br>8) {
+  sl = 0
+  sr = 16 - br = 2
+} else {
+  sl = br - cs = 4
+  sr = 8 - cs = -2
+}
+br = br - cs = 4
+
+ccccbbbb ddcccccc
+cs = 10
+br = 12
+if(br>8) {
+  sl = 0
+  sr = 16 - br = 4
+} else {
+  sl = br - cs = 2
+  sr = 8 - cs = -2
+}
+br = br - cs = 2
+
+ddcccccc dddddddd
+cs = 10
+br = 10
+if(br>8) {
+  sl = 0
+  sr = 16 - br = 6
+} else {
+  sl = br - cs = 0
+  sr = 8 - cs = -2
+}
+br = br - cs = 0
+
+//Parity 2
+bbbbbbba cccccbbb
+cs = 10
+br = 15
+if(br>8) {
+  sl = 0
+  sr = 16 - br = 1
+} else {
+  sl = br - cs = 5
+  sr = 8 - cs = -2
+}
+br = br - cs = 5
+
+cccccbbb dddccccc
+cs = 10
+br = 13
+if(br>8) {
+  sl = 0
+  sr = 16 - br = 3
+} else {
+  sl = br - cs = 3
+  sr = 8 - cs = -2
+}
+br = br - cs = 3
+
+dddccccc eddddddd
+cs = 10
+br = 11
+if(br>8) {
+  sl = 0
+  sr = 16 - br = 5
+} else {
+  sl = br - cs = 1
+  sr = 8 - cs = -2
+}
+br = br - cs = 1
+
+eddddddd eeeeeeee fffffffe
+cs = 10
+br = 17
+if(br>16){
+  sl = 0
+  sr = 24 - br = 7
+  MARK FULL BYTE FOR USE
+} else if(br>8) {
+  sl = 0
+  sr = 16 - br = 
+} else {
+  sl = br - cs = 
+  sr = 8 - cs = -2
+}
+br = br - cs = 
+
+//TODO rest of 10 bits codes
+0000000e eeeeeeee 0000000e
+
+000000987654321e
+0000000eeeeeeeee
+
+//TODONOW rest of 11 bits codes
+//Parity 1
+aaaaaaaa bbbbbaaa
+cs = 11
+br = 16
+if(br>16){
+  sl = 0
+  sr = 24 - br = 
+  MARK FULL BYTE FOR USE
+} else if(br>8) {
+  sl = 0
+  sr = 16 - br = 0
+} else {
+  sl = br - cs = 
+  sr = 8 - cs = -2
+}
+br = br - cs = 5
+
+bbbbbaaa ccbbbbbb
+cs = 11
+br = 13
+if(br>16){
+  sl = 0
+  sr = 24 - br = 7
+  MARK FULL BYTE FOR USE
+} else if(br>8) {
+  sl = 0
+  sr = 16 - br = 3
+} else {
+  sl = br - cs = 
+  sr = 8 - cs = 
+}
+br = br - cs = 2
+
+ccbbbbbb cccccccc dddddddc
+cs = 11
+br = 18
+if(br>16){
+  sl = 0
+  sr = 24 - br = 6
+  MARK FULL BYTE FOR USE
+} else if(br>8) {
+  sl = 0
+  sr = 16 - br = 
+} else {
+  sl = br - cs = 
+  sr = 8 - cs = 
+}
+br = br - cs = 7
+
+//TODO 12 bits codes
+
+
+//Math for bit shifting the MOST significant bits of variable length lzw code (Leftmost)
+//3 bit codes
+//Parity 1
+ccbbbaaa
+cs = 3
+br = 8
+if(br<8){
+  
+
 if(br>8) {
   sl = 0
   sr = 16 - br = 8

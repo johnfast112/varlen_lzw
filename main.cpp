@@ -56,7 +56,7 @@ int main(int argc, char** argv){
 
   //TODO: Return indicies
   LZW::IndexStr indicies{};
-  LZW::toindicies(args.lzw_minimum_code_size, data, size, &indicies);
+  LZW::get_varlen_indicies(args.lzw_minimum_code_size, data, size, &indicies);
 
   //This is output. TODO: Remove me maybe?
   int count{0};

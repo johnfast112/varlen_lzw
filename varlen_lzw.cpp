@@ -289,14 +289,14 @@ int LZW::get_varlen_indicies(uint16_t lzw_minimum_code_size, const char* data_st
   return 1;
 }
 
-//TODO: This is a stack overflow waiting to happen
+//Safe to call on address of variables
 void LZW::freeIndexStr(LZW::IndexStr* is){
-  if(is->next == nullptr){
-    return;
-  } else {
-    freeIndexStr(is->next);
-    delete is->next;
-    is->next = nullptr;
-    return;
+  LZW::IndexStr* is1 = is->next;
+  LZW::IndexStr* is2;
+  while(is1){
+    is2 = is1;
+    is1 = is1->next;
+    delete is2;
   }
+  is->next = nullptr;
 }
